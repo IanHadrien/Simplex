@@ -1,6 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import { FiChevronDown, FiChevronLeft, FiChevronRight, FiChevronUp } from "react-icons/fi";
+import DenseTable from "./components/Table";
 
 const tipoRestricao = ["<=", "=", ">="];
 
@@ -52,6 +53,11 @@ export default function App() {
       ],
   });
 
+  const editTipo = (value) => {
+    const newForm = form;
+    newForm.to = value;
+    setForm({...newForm});
+  }
   const editZ = (value, index) => {
     const newForm = form;
     newForm.f[index] = value;
@@ -376,7 +382,9 @@ export default function App() {
     let newIndexQueEntra = indexQueEntra;
     let newIndexQueSai = indexQueSai;
     newIndexQueEntra.push(queEntra);
+    setIndexQueEntra(newIndexQueEntra);
     newIndexQueSai.push(queSai);
+    console.log(newIndexQueEntra, newIndexQueSai)
 
     // ITERANDO A LINHA PIVÔ
     for (let i = 2; i < novaLinha[queSai].length; i++) {
@@ -458,7 +466,8 @@ export default function App() {
         }
 
         newInteracoes.push(linhaZduasFases)
-        console.log("Interacoes: ", newInteracoes);
+        console.log("Interacoes final: ", newInteracoes);
+        setInteracoes(newInteracoes);
         newDuasFases = false
     } else if(countNovaLinha0 >= 0 && newCountExecessos == 0 && newDuasFases == false) {
         //SE NÃO TEM MAIS VARIÁVEIS PARA ITERAR E NÃO EXISTEM MAIS EXCESSOS E FASE DOIS FOI EXECUTADA
@@ -473,6 +482,7 @@ export default function App() {
     } else {
         // ITERAÇÃO FINAL
         let iteracaoFinal = JSON.parse(JSON.stringify(newInteracoes[newInteracoes.length - 1]))
+        // setInteracoes(iteracaoFinal);
 
         let newResultado = resultado;
 
@@ -507,7 +517,7 @@ export default function App() {
         newResultado.zOtimo = iteracaoFinal[0][iteracaoFinal[i].length - 1];
 
         console.log("newResultado: ", newResultado);
-        console.log("iteracaoFinal: ", iteracaoFinal);
+        // console.log("iteracaoFinal: ", iteracaoFinal);
     }
   }
 
@@ -524,24 +534,31 @@ export default function App() {
 
       {/* Botões de Controle */}
       <div>
-        <div className="flex justify-between px-5">
+        <div>
+            {/* <small>VARIÁVEIS</small> */}
+            {/* <small>RESTRIÇÕES</small> */}
             <small>VARIÁVEIS</small>
-            <small>RESTRIÇÕES</small>
+            <div style={{ flex: '1' }}></div>
+            <button onClick={subVars} className="text-red-600">
+              {/* <FiChevronLeft size={25} /> */}
+              Remover
+            </button>
+            <button onClick={addVars} className="text-green-600">
+              {/* <FiChevronRight size={25} /> */}
+              Adicionar
+            </button>
         </div>
 
-        <div className="flex">
-          <button onClick={subVars} className="text-red-600">
-            <FiChevronLeft size={25} />
-          </button>
-          <button onClick={addVars} className="text-green-600">
-            <FiChevronRight size={25} />
-          </button>
+        <div>
+          <small>RESTRIÇÕES</small>
           <div style={{ flex: '1' }}></div>
           <button onClick={subConstraineds} className="text-red-600">
-            <FiChevronDown size={25} />
+            {/* <FiChevronDown size={25} /> */}
+            Remover
           </button>
           <button onClick={addConstraineds} className="text-green-600">
-            <FiChevronUp size={25} />
+            {/* <FiChevronUp size={25} /> */}
+            Adicionar
           </button>
         </div>
       </div>
@@ -560,12 +577,12 @@ export default function App() {
                       <Select
                         className="w-full pr-36"
                         labelId="demo-simple-select-label"
-                        value={10}
+                        value={form.to}
                         label="Age"
-                        // onChange={handleChange}
+                        onChange={(e) => editTipo(e.target.value)}
                       >
-                        <MenuItem value={10}>MAX</MenuItem>
-                        <MenuItem value={20}>MIN</MenuItem>
+                        <MenuItem value="MAX">MAX</MenuItem>
+                        <MenuItem value="MIN">MIN</MenuItem>
                       </Select>
                     </FormControl>
                   </th>
@@ -635,6 +652,12 @@ export default function App() {
       <button onClick={calc}>
         Calcular
       </button>
+
+      <div>
+        Tabela
+
+        <DenseTable iteracoes={interacoes} indexQueEntra={indexQueEntra} />
+      </div>
     </div>
   )
 }
