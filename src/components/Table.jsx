@@ -56,7 +56,7 @@ export default function DenseTable({iteracoes, indexQueEntra}) {
               {lines.map((li, j) => (
                 <TableCell key={j} align="center">
                   {j == indexQueEntra[index] ?
-                  li.toFixed(2) : li}
+                  li : li}
                 </TableCell>
               ))}
               {/* <TableCell align="center">{row.calories}</TableCell>
