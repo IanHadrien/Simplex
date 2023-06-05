@@ -649,13 +649,13 @@ export default function App() {
         </form>
       </div>
 
-      <button onClick={calc}>
-        Calcular
-      </button>
+      <div className="flex justify-center mb-4 mt-2">
+        <button className="bg-blue-600 text-white p-2" onClick={calc}>
+          Calcular
+        </button>
+      </div>
 
       <div>
-        Tabela
-
         <DenseTable iteracoes={interacoes} indexQueEntra={indexQueEntra} />
       </div>
     </div>
