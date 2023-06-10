@@ -1,7 +1,9 @@
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
-import { FiChevronDown, FiChevronLeft, FiChevronRight, FiChevronUp } from "react-icons/fi";
 import DenseTable from "./components/Table";
+import { FiChevronLeft } from "react-icons/fi";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { CiCircleRemove } from "react-icons/ci";
 
 const tipoRestricao = ["<=", "=", ">="];
 
@@ -527,40 +529,57 @@ export default function App() {
   }
 
   return (
-    <div>
+    <div className="w-3/4 m-auto">
       <div className="text-center">
-        <h2>Problema Simplez</h2>
+        <h2 className="p-4 text-2xl">Trabalho de Pesquisa Operacional</h2>
       </div>
 
       {/* Botões de Controle */}
-      <div>
+      <div className="flex justify-between">
         <div>
-            {/* <small>VARIÁVEIS</small> */}
-            {/* <small>RESTRIÇÕES</small> */}
-            <small>VARIÁVEIS</small>
-            <div style={{ flex: '1' }}></div>
-            <button onClick={subVars} className="text-red-600">
-              {/* <FiChevronLeft size={25} /> */}
-              Remover
+          <small className="font-bold">VARIÁVEIS</small>
+          <div className="mt-2 flex justify-center">
+            <button onClick={subVars} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
+              <IoIosRemove size={30} />
             </button>
-            <button onClick={addVars} className="text-green-600">
-              {/* <FiChevronRight size={25} /> */}
-              Adicionar
+            <button onClick={addVars} className="text-green-600 border-2 hover:bg-gray-50">
+              <IoIosAdd size={30} />
             </button>
+          </div>
         </div>
 
         <div>
-          <small>RESTRIÇÕES</small>
-          <div style={{ flex: '1' }}></div>
-          <button onClick={subConstraineds} className="text-red-600">
-            {/* <FiChevronDown size={25} /> */}
-            Remover
-          </button>
-          <button onClick={addConstraineds} className="text-green-600">
-            {/* <FiChevronUp size={25} /> */}
-            Adicionar
-          </button>
+          <small className="font-bold">RESTRIÇÕES</small>
+          <div className="mt-2 flex justify-center">
+            <button onClick={subConstraineds} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
+              <IoIosRemove size={30} />
+            </button>
+            <button onClick={addConstraineds} className="text-green-600 border-2 hover:bg-gray-50">
+              <IoIosAdd size={30} />
+            </button>
+          </div>
         </div>
+      </div>
+
+      <div className="mt-4 text-center">
+        <div>
+          Qual é o objetivo da função?
+          <FormControl>
+            <InputLabel>tipo</InputLabel>
+            <Select
+              className="w-full pr-36"
+              labelId="demo-simple-select-label"
+              value={form.to}
+              label="Age"
+              onChange={(e) => editTipo(e.target.value)}
+            >
+              <MenuItem value="MAX">MAX</MenuItem>
+              <MenuItem value="MIN">MIN</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div>Função:</div>
       </div>
 
       {/* Formulario Principal */}
@@ -571,7 +590,7 @@ export default function App() {
             <table>
               <thead>
                 <tr>
-                  <th>
+                  {/* <th>
                     <FormControl>
                       <InputLabel id="demo-simple-select-label">tipo</InputLabel>
                       <Select
@@ -585,7 +604,7 @@ export default function App() {
                         <MenuItem value="MIN">MIN</MenuItem>
                       </Select>
                     </FormControl>
-                  </th>
+                  </th> */}
                   <th><TextField id="filled-basic" label="Z =" disabled /></th>
                   {form.f.map((f, index) => (
                     <th key={index}>
