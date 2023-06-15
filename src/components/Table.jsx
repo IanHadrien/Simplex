@@ -10,7 +10,7 @@ export default function DenseTable({iteracoes, indexQueEntra}) {
   return (
     <div>
       {iteracoes.map((item, index) => (
-      <div key={index} className="relative overflow-x-auto shadow-md sm:rounded-lg w-3/4 mb-6 m-auto">
+      <div key={index} className="relative overflow-x-auto shadow-md sm:rounded-lg mb-6 m-auto">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                 Interação {index+1}

@@ -4,6 +4,18 @@ import DenseTable from "./components/Table";
 import { FiChevronLeft } from "react-icons/fi";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
 import { CiCircleRemove } from "react-icons/ci";
+import { VictoryArea } from "victory";
+import OptimalSolutionChart from "./components/OptimalSolutionChart";
+
+const dataVictoryArea = [
+  { x: 'A', y: 10 },
+  { x: 'B', y: 20 },
+];
+
+const dataChats = {
+  labels: ['Variável 1', 'Variável 2', 'Variável 3'],
+  values: [10, 20, 30],
+};
 
 const tipoRestricao = ["<=", "=", ">="];
 
@@ -307,10 +319,6 @@ export default function App() {
 
     // let newLinhas = linhas;
     let newForm = form;
-    // console.log("newLinhas: ", newLinhas);
-    // console.log("newForm: ", newForm);
-    // console.log("formTest: ", formTest);
-    // console.log("newIndexExecessos: ", newIndexExecessos);
 
     for (let i = 2; i < newForm.f.length + 2; i++) {
       if(novaLinha[0][i] < 0) {
@@ -517,6 +525,7 @@ export default function App() {
 
         // ADICIONANDO OS VALORES ÓTIMOS DE Z
         newResultado.zOtimo = iteracaoFinal[0][iteracaoFinal[i].length - 1];
+        setResultado(newResultado);
 
         console.log("newResultado: ", newResultado);
         // console.log("iteracaoFinal: ", iteracaoFinal);
@@ -529,7 +538,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-3/4 m-auto">
+    <div className="w-3/4 m-auto py-6">
       <div className="text-center">
         <h2 className="p-4 text-2xl">Trabalho de Pesquisa Operacional</h2>
       </div>
@@ -562,13 +571,12 @@ export default function App() {
       </div>
 
       <div className="mt-4 text-center">
-        <div>
-          Qual é o objetivo da função?
-          <FormControl>
-            <InputLabel>tipo</InputLabel>
+        <div className="flex justify-center items-center">
+          <p className="text-xl pr-2">Qual é o objetivo da função?</p>
+          <FormControl size="small">
+            <InputLabel>{form.to}</InputLabel>
             <Select
-              className="w-full pr-36"
-              labelId="demo-simple-select-label"
+              className="w-full p-0"
               value={form.to}
               label="Age"
               onChange={(e) => editTipo(e.target.value)}
@@ -579,7 +587,22 @@ export default function App() {
           </FormControl>
         </div>
 
-        <div>Função:</div>
+        <div className="flex justify-center items-center mt-6">
+          <p className="text-xl pr-2">Função:</p>
+          {form.f.map((f, index) => (
+            <div key={index} >
+              {index != 0 && <span className="text-2xl mx-1">+</span>}
+              <TextField
+                size="small"
+                className="p-0 w-20"
+                type="number"
+                label={`X${index+1}`}
+                value={f}
+                onChange={(e) => editZ(e.target.value, index)}
+              />
+            </ div>
+          ))}
+        </div>
       </div>
 
       {/* Formulario Principal */}
@@ -605,7 +628,7 @@ export default function App() {
                       </Select>
                     </FormControl>
                   </th> */}
-                  <th><TextField id="filled-basic" label="Z =" disabled /></th>
+                  {/* <th><TextField id="filled-basic" label="Z =" disabled /></th>
                   {form.f.map((f, index) => (
                     <th key={index}>
                       <TextField 
@@ -615,7 +638,7 @@ export default function App() {
                         onChange={(e) => editZ(e.target.value, index)}
                       />
                     </th>
-                  ))}
+                  ))} */}
                 </tr>
               </thead>
             </table>
@@ -677,6 +700,14 @@ export default function App() {
       <div>
         <DenseTable iteracoes={interacoes} indexQueEntra={indexQueEntra} />
       </div>
+
+      {interacoes.length > 0 && <div>
+        <p className="text-xl">A solução ótima é <span className="font-bold">Z = {resultado?.zOtimo}</span></p>
+      </div>}
+
+      {/* <VictoryArea data={dataVictoryArea} x="x" y="y" />
+
+      <OptimalSolutionChart data={dataChats} /> */}
     </div>
   )
 }
