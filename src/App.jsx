@@ -1,7 +1,21 @@
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
-import { FiChevronDown, FiChevronLeft, FiChevronRight, FiChevronUp } from "react-icons/fi";
 import DenseTable from "./components/Table";
+import { FiChevronLeft } from "react-icons/fi";
+import { IoIosAdd, IoIosRemove } from "react-icons/io";
+import { CiCircleRemove } from "react-icons/ci";
+import { VictoryArea } from "victory";
+import OptimalSolutionChart from "./components/OptimalSolutionChart";
+
+const dataVictoryArea = [
+  { x: 'A', y: 10 },
+  { x: 'B', y: 20 },
+];
+
+const dataChats = {
+  labels: ['Variável 1', 'Variável 2', 'Variável 3'],
+  values: [10, 20, 30],
+};
 
 const tipoRestricao = ["<=", "=", ">="];
 
@@ -305,10 +319,6 @@ export default function App() {
 
     // let newLinhas = linhas;
     let newForm = form;
-    // console.log("newLinhas: ", newLinhas);
-    // console.log("newForm: ", newForm);
-    // console.log("formTest: ", formTest);
-    // console.log("newIndexExecessos: ", newIndexExecessos);
 
     for (let i = 2; i < newForm.f.length + 2; i++) {
       if(novaLinha[0][i] < 0) {
@@ -515,6 +525,7 @@ export default function App() {
 
         // ADICIONANDO OS VALORES ÓTIMOS DE Z
         newResultado.zOtimo = iteracaoFinal[0][iteracaoFinal[i].length - 1];
+        setResultado(newResultado);
 
         console.log("newResultado: ", newResultado);
         // console.log("iteracaoFinal: ", iteracaoFinal);
@@ -527,39 +538,70 @@ export default function App() {
   }
 
   return (
-    <div>
+    <div className="w-3/4 m-auto py-6">
       <div className="text-center">
-        <h2>Problema Simplez</h2>
+        <h2 className="p-4 text-2xl">Trabalho de Pesquisa Operacional</h2>
       </div>
 
       {/* Botões de Controle */}
-      <div>
+      <div className="flex justify-between">
         <div>
-            {/* <small>VARIÁVEIS</small> */}
-            {/* <small>RESTRIÇÕES</small> */}
-            <small>VARIÁVEIS</small>
-            <div style={{ flex: '1' }}></div>
-            <button onClick={subVars} className="text-red-600">
-              {/* <FiChevronLeft size={25} /> */}
-              Remover
+          <small className="font-bold">VARIÁVEIS</small>
+          <div className="mt-2 flex justify-center">
+            <button onClick={subVars} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
+              <IoIosRemove size={30} />
             </button>
-            <button onClick={addVars} className="text-green-600">
-              {/* <FiChevronRight size={25} /> */}
-              Adicionar
+            <button onClick={addVars} className="text-green-600 border-2 hover:bg-gray-50">
+              <IoIosAdd size={30} />
             </button>
+          </div>
         </div>
 
         <div>
-          <small>RESTRIÇÕES</small>
-          <div style={{ flex: '1' }}></div>
-          <button onClick={subConstraineds} className="text-red-600">
-            {/* <FiChevronDown size={25} /> */}
-            Remover
-          </button>
-          <button onClick={addConstraineds} className="text-green-600">
-            {/* <FiChevronUp size={25} /> */}
-            Adicionar
-          </button>
+          <small className="font-bold">RESTRIÇÕES</small>
+          <div className="mt-2 flex justify-center">
+            <button onClick={subConstraineds} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
+              <IoIosRemove size={30} />
+            </button>
+            <button onClick={addConstraineds} className="text-green-600 border-2 hover:bg-gray-50">
+              <IoIosAdd size={30} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 text-center">
+        <div className="flex justify-center items-center">
+          <p className="text-xl pr-2">Qual é o objetivo da função?</p>
+          <FormControl size="small">
+            <InputLabel>{form.to}</InputLabel>
+            <Select
+              className="w-full p-0"
+              value={form.to}
+              label="Age"
+              onChange={(e) => editTipo(e.target.value)}
+            >
+              <MenuItem value="MAX">MAX</MenuItem>
+              <MenuItem value="MIN">MIN</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div className="flex justify-center items-center mt-6">
+          <p className="text-xl pr-2">Função:</p>
+          {form.f.map((f, index) => (
+            <div key={index} >
+              {index != 0 && <span className="text-2xl mx-1">+</span>}
+              <TextField
+                size="small"
+                className="p-0 w-20"
+                type="number"
+                label={`X${index+1}`}
+                value={f}
+                onChange={(e) => editZ(e.target.value, index)}
+              />
+            </ div>
+          ))}
         </div>
       </div>
 
@@ -571,7 +613,7 @@ export default function App() {
             <table>
               <thead>
                 <tr>
-                  <th>
+                  {/* <th>
                     <FormControl>
                       <InputLabel id="demo-simple-select-label">tipo</InputLabel>
                       <Select
@@ -585,8 +627,8 @@ export default function App() {
                         <MenuItem value="MIN">MIN</MenuItem>
                       </Select>
                     </FormControl>
-                  </th>
-                  <th><TextField id="filled-basic" label="Z =" disabled /></th>
+                  </th> */}
+                  {/* <th><TextField id="filled-basic" label="Z =" disabled /></th>
                   {form.f.map((f, index) => (
                     <th key={index}>
                       <TextField 
@@ -596,7 +638,7 @@ export default function App() {
                         onChange={(e) => editZ(e.target.value, index)}
                       />
                     </th>
-                  ))}
+                  ))} */}
                 </tr>
               </thead>
             </table>
@@ -649,15 +691,23 @@ export default function App() {
         </form>
       </div>
 
-      <button onClick={calc}>
-        Calcular
-      </button>
+      <div className="flex justify-center mb-4 mt-2">
+        <button className="bg-blue-600 text-white p-2" onClick={calc}>
+          Calcular
+        </button>
+      </div>
 
       <div>
-        Tabela
-
         <DenseTable iteracoes={interacoes} indexQueEntra={indexQueEntra} />
       </div>
+
+      {interacoes.length > 0 && <div>
+        <p className="text-xl">A solução ótima é <span className="font-bold">Z = {resultado?.zOtimo}</span></p>
+      </div>}
+
+      {/* <VictoryArea data={dataVictoryArea} x="x" y="y" />
+
+      <OptimalSolutionChart data={dataChats} /> */}
     </div>
   )
 }
