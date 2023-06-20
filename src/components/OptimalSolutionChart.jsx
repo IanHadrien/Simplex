@@ -1,51 +1,63 @@
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
-import { LinearScale } from 'chart.js';
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 
-export default function OptimalSolutionChart ({data}) {
-  const chartRef = useRef(null);
-  const chartInstance = useRef(null);
+const data = {
+  labels: ['x1', 'x2', 'x3'],
+  datasets: [
+    {
+      label: 'Restrição 1',
+      data: [3, 2, 0],
+      fill: false,
+      borderColor: 'red',
+    },
+    {
+      label: 'Restrição 2',
+      data: [1, 1, 0],
+      fill: false,
+      borderColor: 'blue',
+    },
+    {
+      label: 'Restrição 3',
+      data: [1, 0, 1],
+      fill: false,
+      borderColor: 'green',
+    },
+  ],
+};
 
-  useEffect(() => {
-    // Registre o módulo de escala linear
-    Chart.register(LinearScale);
-
-    if (chartInstance.current) {
-      // Se houver um gráfico anterior, destrua-o
-      chartInstance.current.destroy();
-    }
-
-    // Configuração do gráfico
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          type: 'linear',
-          beginAtZero: true,
-        },
+const options = {
+  scales: {
+    x: {
+      type: 'category',
+      display: true,
+      title: {
+        display: true,
+        text: 'Variáveis',
       },
-    };
-
-    // Renderização do gráfico
-    const ctx = chartRef.current.getContext('2d');
-    chartInstance.current = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: data.labels,
-        datasets: [
-          {
-            label: 'Solução Ótima',
-            data: data.values,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-          },
-        ],
+    },
+    y: {
+      display: true,
+      title: {
+        display: true,
+        text: 'Valor',
       },
-      options: chartOptions,
-    });
-  }, [data]);
+    },
+  },
+};
 
-  return <canvas ref={chartRef} />;
+export default function OptimalSolutionChart () {
+  return (
+    <Line data={data} options={options} />
+
+    // <ResponsiveContainer width="100%" height={400}>
+    //   <LineChart data={optimalSolution}>
+    //     <CartesianGrid strokeDasharray="3 3" />
+    //     <XAxis dataKey="x" />
+    //     <YAxis />
+    //     <Tooltip />
+    //     <Legend />
+    //     <Line type="monotone" dataKey="y" stroke="#8884d8" strokeWidth={2} dot={{ r: 5 }} />
+    //   </LineChart>
+    // </ResponsiveContainer>
+  );
 }

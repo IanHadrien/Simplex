@@ -544,7 +544,7 @@ export default function App() {
       </div>
 
       {/* Botões de Controle */}
-      <div className="flex justify-between">
+      <div className="flex justify-center">
         <div>
           <small className="font-bold">VARIÁVEIS</small>
           <div className="mt-2 flex justify-center">
@@ -557,7 +557,7 @@ export default function App() {
           </div>
         </div>
 
-        <div>
+        <div className="pl-4">
           <small className="font-bold">RESTRIÇÕES</small>
           <div className="mt-2 flex justify-center">
             <button onClick={subConstraineds} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
@@ -705,9 +705,7 @@ export default function App() {
         <p className="text-xl">A solução ótima é <span className="font-bold">Z = {resultado?.zOtimo}</span></p>
       </div>}
 
-      {/* <VictoryArea data={dataVictoryArea} x="x" y="y" />
-
-      <OptimalSolutionChart data={dataChats} /> */}
+      {/* <OptimalSolutionChart /> */}
     </div>
   )
 }
