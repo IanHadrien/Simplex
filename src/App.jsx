@@ -538,164 +538,175 @@ export default function App() {
   }
 
   return (
+    <div className="h-full bg-gray-100">
     <div className="w-3/4 m-auto py-6">
-      <div className="text-center">
-        <h2 className="p-4 text-2xl">Trabalho de Pesquisa Operacional</h2>
-      </div>
-
-      {/* Botões de Controle */}
-      <div className="flex justify-center">
-        <div>
-          <small className="font-bold">VARIÁVEIS</small>
-          <div className="mt-2 flex justify-center">
-            <button onClick={subVars} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
-              <IoIosRemove size={30} />
-            </button>
-            <button onClick={addVars} className="text-green-600 border-2 hover:bg-gray-50">
-              <IoIosAdd size={30} />
-            </button>
-          </div>
+      <div className="w-1/2 m-auto">
+        <div className="text-center">
+          <h2 className="p-4 text-2xl">Trabalho de Pesquisa Operacional</h2>
         </div>
 
-        <div className="pl-4">
-          <small className="font-bold">RESTRIÇÕES</small>
-          <div className="mt-2 flex justify-center">
-            <button onClick={subConstraineds} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
-              <IoIosRemove size={30} />
-            </button>
-            <button onClick={addConstraineds} className="text-green-600 border-2 hover:bg-gray-50">
-              <IoIosAdd size={30} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-4 text-center">
-        <div className="flex justify-center items-center">
-          <p className="text-xl pr-2">Qual é o objetivo da função?</p>
-          <FormControl size="small">
-            <InputLabel>{form.to}</InputLabel>
-            <Select
-              className="w-full p-0"
-              value={form.to}
-              label="Age"
-              onChange={(e) => editTipo(e.target.value)}
-            >
-              <MenuItem value="MAX">MAX</MenuItem>
-              <MenuItem value="MIN">MIN</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-
-        <div className="flex justify-center items-center mt-6">
-          <p className="text-xl pr-2">Função:</p>
-          {form.f.map((f, index) => (
-            <div key={index} >
-              {index != 0 && <span className="text-2xl mx-1">+</span>}
-              <TextField
-                size="small"
-                className="p-0 w-20"
-                type="number"
-                label={`X${index+1}`}
-                value={f}
-                onChange={(e) => editZ(e.target.value, index)}
-              />
-            </ div>
-          ))}
-        </div>
-      </div>
-
-      {/* Formulario Principal */}
-      <div className="flex justify-center mt-10">
-        <form>
+        {/* Botões de Controle */}
+        <div className="flex justify-center">
           <div>
-            {/* Função Z */}
-            <table>
-              <thead>
-                <tr>
-                  {/* <th>
-                    <FormControl>
-                      <InputLabel id="demo-simple-select-label">tipo</InputLabel>
-                      <Select
-                        className="w-full pr-36"
-                        labelId="demo-simple-select-label"
-                        value={form.to}
-                        label="Age"
-                        onChange={(e) => editTipo(e.target.value)}
-                      >
-                        <MenuItem value="MAX">MAX</MenuItem>
-                        <MenuItem value="MIN">MIN</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </th> */}
-                  {/* <th><TextField id="filled-basic" label="Z =" disabled /></th>
-                  {form.f.map((f, index) => (
-                    <th key={index}>
-                      <TextField 
-                        type="number"
-                        label={`X${index+1}`}
-                        value={f}
-                        onChange={(e) => editZ(e.target.value, index)}
-                      />
-                    </th>
-                  ))} */}
-                </tr>
-              </thead>
-            </table>
-
-            {/* Restrições Z */}
-            <table className="mt-10">
-              <tbody>
-                {form.constrained.map((constrained, index) => (
-                <tr key={index}>
-                  {form.constrained[index].vars.map((j, i) => (
-                  <td className="pb-2" key={i}>
-                    <TextField 
-                      type="number" 
-                      label={`X${i+1}`} 
-                      value={form.constrained[index].vars[i]}
-                      onChange={(e) => editXs(e.target.value, index, i)}
-                    />
-                  </td>))}
-
-                  <td>
-                    <FormControl sx={{ minWidth: 120 }}>
-                      <Select
-                        className="mb-2"
-                        value={form.constrained[index].to}
-                        onChange={(e) => editRestricoes(e.target.value, index)}
-                        displayEmpty
-                      >
-                        {tipoRestricao.map((item, index) => (
-                          <MenuItem key={index} value={item}>
-                            {item}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </td>
-
-                  <td className="pb-2">
-                    <TextField 
-                      type="number" 
-                      value={form.constrained[index].cost}
-                      onChange={(e) => editResult(e.target.value, index)}
-                    />
-                  </td>
-                </tr>))}
-              </tbody>
-            </table>
+            <small className="font-bold">VARIÁVEIS</small>
+            <div className="mt-2 flex justify-center">
+              <button onClick={subVars} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
+                <IoIosRemove size={30} />
+              </button>
+              <button onClick={addVars} className="text-blue-600 border-2 hover:bg-gray-50">
+                <IoIosAdd size={30} />
+              </button>
+            </div>
           </div>
 
+          <div className="pl-4">
+            <small className="font-bold">RESTRIÇÕES</small>
+            <div className="mt-2 flex justify-center">
+              <button onClick={subConstraineds} className="text-red-600 border-2 mr-2 hover:bg-gray-50">
+                <IoIosRemove size={30} />
+              </button>
+              <button onClick={addConstraineds} className="text-blue-600 border-2 hover:bg-gray-50">
+                <IoIosAdd size={30} />
+              </button>
+            </div>
+          </div>
+        </div>
 
-        </form>
+        <div className="mt-4 text-center">
+          <div className="flex justify-center items-center">
+            <p className="text-xl pr-2">Qual é o objetivo da função?</p>
+            <FormControl size="small">
+              <InputLabel>{form.to}</InputLabel>
+              <Select
+                className="w-full p-0"
+                value={form.to}
+                label="Age"
+                variant="filled"
+                onChange={(e) => editTipo(e.target.value)}
+              >
+                <MenuItem value="MAX">MAX</MenuItem>
+                <MenuItem value="MIN">MIN</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+
+          <div className="flex justify-center items-center mt-6">
+            <p className="text-xl pr-2">Função:</p>
+            {form.f.map((f, index) => (
+              <div key={index} >
+                {index != 0 && <span className="text-2xl mx-1 mt-2">+</span>}
+                <TextField
+                  size="small"
+                  className="p-0 w-20"
+                  type="number"
+                  variant="filled"
+                  label={`X${index+1}`}
+                  value={f}
+                  onChange={(e) => editZ(e.target.value, index)}
+                />
+              </ div>
+            ))}
+          </div>
+        </div>
+
+        {/* Formulario Principal */}
+        <div className="flex justify-center mt-10">
+          <form>
+            <div>
+              {/* Função Z */}
+              <table>
+                <thead>
+                  <tr>
+                    {/* <th>
+                      <FormControl>
+                        <InputLabel id="demo-simple-select-label">tipo</InputLabel>
+                        <Select
+                          className="w-full pr-36"
+                          labelId="demo-simple-select-label"
+                          value={form.to}
+                          label="Age"
+                          onChange={(e) => editTipo(e.target.value)}
+                        >
+                          <MenuItem value="MAX">MAX</MenuItem>
+                          <MenuItem value="MIN">MIN</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </th> */}
+                    {/* <th><TextField id="filled-basic" label="Z =" disabled /></th>
+                    {form.f.map((f, index) => (
+                      <th key={index}>
+                        <TextField 
+                          type="number"
+                          label={`X${index+1}`}
+                          value={f}
+                          onChange={(e) => editZ(e.target.value, index)}
+                        />
+                      </th>
+                    ))} */}
+                  </tr>
+                </thead>
+              </table>
+
+              {/* Restrições Z */}
+              <table className="mt-10">
+                <tbody>
+                  {form.constrained.map((constrained, index) => (
+                  <tr key={index}>
+                    {form.constrained[index].vars.map((j, i) => (
+                    <td className="pb-2" key={i}>
+                      <TextField 
+                        type="number" 
+                        variant="filled"
+                        label={`X${i+1}`} 
+                        value={form.constrained[index].vars[i]}
+                        onChange={(e) => editXs(e.target.value, index, i)}
+                      />
+                    </td>))}
+
+                    <td>
+                      <FormControl sx={{ minWidth: 80 }}>
+                        <Select
+                          className="mb-2"
+                          variant="filled"
+                          value={form.constrained[index].to}
+                          onChange={(e) => editRestricoes(e.target.value, index)}
+                          displayEmpty
+                        >
+                          {tipoRestricao.map((item, index) => (
+                            <MenuItem key={index} value={item}>
+                              {item}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </td>
+
+                    <td className="pb-2">
+                      <TextField 
+                        type="number" 
+                        variant="filled"
+                        value={form.constrained[index].cost}
+                        onChange={(e) => editResult(e.target.value, index)}
+                      />
+                    </td>
+                  </tr>))}
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+
+        <div className="mb-12 mt-5">
+          <button className="bg-blue-600 text-white p-2 w-full rounded" onClick={calc}>
+            Calcular
+          </button>
+
+          <button className="bg-red-600 text-white p-2 w-full rounded my-4" onClick={() => window.location.reload()}>
+            Resetar
+          </button>
+        </div>
       </div>
 
-      <div className="flex justify-center mb-4 mt-2">
-        <button className="bg-blue-600 text-white p-2" onClick={calc}>
-          Calcular
-        </button>
-      </div>
 
       <div>
         <DenseTable iteracoes={interacoes} indexQueEntra={indexQueEntra} />
@@ -704,8 +715,7 @@ export default function App() {
       {interacoes.length > 0 && <div>
         <p className="text-xl">A solução ótima é <span className="font-bold">Z = {resultado?.zOtimo}</span></p>
       </div>}
-
-      {/* <OptimalSolutionChart /> */}
+    </div>
     </div>
   )
 }
