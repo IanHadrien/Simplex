@@ -1,26 +1,13 @@
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import DenseTable from "./components/Table";
-import { FiChevronLeft } from "react-icons/fi";
 import { IoIosAdd, IoIosRemove } from "react-icons/io";
-import { CiCircleRemove } from "react-icons/ci";
-import { VictoryArea } from "victory";
-import OptimalSolutionChart from "./components/OptimalSolutionChart";
-
-const dataVictoryArea = [
-  { x: 'A', y: 10 },
-  { x: 'B', y: 20 },
-];
-
-const dataChats = {
-  labels: ['Variável 1', 'Variável 2', 'Variável 3'],
-  values: [10, 20, 30],
-};
 
 const tipoRestricao = ["<=", "=", ">="];
 
 export default function App() {
   const [calculated, setCalculated] = useState(false);
+  const [valoresInteiros, setValoresInteiros] = useState(false);
   const [decimal, setDecimal] = useState(false);
   const [wasMIN, setWasMIN] = useState(0);
   const [linhas, setLinhas] = useState([]);
@@ -156,6 +143,7 @@ export default function App() {
 
   // FUNÇÃO DE CÁLCULO
   const calc = () => {
+    console.log("Form:", form);
     let newForm = form;
     let newWasMIN = wasMIN;
     setCalculated(true);
@@ -537,6 +525,103 @@ export default function App() {
     return (regex.test(input));
   }
 
+  const calcIntegers = () => {
+    setValoresInteiros(true);
+
+    let maioreMenorQueX = [];
+    let MaioreseMenoresQueX = [];
+
+    // let newLinhas = linhas;
+    let newForm = form;
+
+    for (let i = 0; i < form.f.length; i++) {
+      maioreMenorQueX = [];
+      maioreMenorQueX.push(Math.floor(resultado.xOtimo[i]))
+      maioreMenorQueX.push(Math.ceil(resultado.xOtimo[i]))
+      MaioreseMenoresQueX.push(maioreMenorQueX)
+    }
+
+    // CONBINAÇÕES POSSÍVEIS DOS VALORES DE X
+    let combinacoes = []
+    combinacoes = combinar(MaioreseMenoresQueX)
+
+    // VARIÁVEIS AUXILIÁRES
+    let resultadoInteiro = 0;
+    let zInteiro = 0
+    let xInteiro = []
+    if(wasMIN){
+        zInteiro = 99999
+    } else {
+        zInteiro = -1
+    }
+
+    // VERIFICANDO SE O VALOR INTEIRO É MELHOR QUE O ANTERIOR ENCONTRADO, E PIOR QUE O VALOR ÓTIMO DECIMAL
+    for (let i = 0; i < combinacoes.length; i++) {
+      if(wasMIN){
+          resultadoInteiro = 0
+          for (let j = 0; j < form.f.length; j++) {
+              resultadoInteiro += (form.f[j] * -1) * combinacoes[i][j]
+          }
+          if(resultadoInteiro >= resultado.zOtimo && resultadoInteiro < zInteiro){
+              zInteiro = resultadoInteiro
+              xInteiro = [];
+              xInteiro.push(combinacoes[i])
+          }
+          } else {
+              resultadoInteiro = 0
+              for (let j = 0; j < form.f.length; j++) {
+                  resultadoInteiro += form.f[j] * combinacoes[i][j]
+              }
+              if(resultadoInteiro <= resultado.zOtimo && resultadoInteiro > zInteiro){
+                  zInteiro = resultadoInteiro
+                  xInteiro = [];
+                  xInteiro.push(combinacoes[i])
+              }
+          }
+    }
+
+    // Z ÓTIMO INTEIRO
+    let newResultado = resultado;
+    newResultado.zInteger = zInteiro;
+
+    // X ÓTIMO INTEIRO
+    for (let i = 0; i < xInteiro.length; i++) {
+      newResultado.xInteger.push(xInteiro[i])
+    }
+
+    console.log("newResultado inteiro:", newResultado);
+  }
+
+  const combinar = (arraysToCombine) => {
+    var divisors = [];
+
+    for (var i = arraysToCombine.length - 1; i >= 0; i--) {
+        divisors[i] = divisors[i + 1] ? divisors[i + 1] * arraysToCombine[i + 1].length : 1;
+    }
+
+    function getPermutation(n, arraysToCombine) {
+      var result = [],
+          curArray;
+      for (var i = 0; i < arraysToCombine.length; i++) {
+          curArray = arraysToCombine[i];
+          result.push(curArray[Math.floor(n / divisors[i]) % curArray.length]);
+      }
+      return result;
+    }
+
+    var numPerms = arraysToCombine[0].length;
+    for(var i = 1; i < arraysToCombine.length; i++) {
+        numPerms *= arraysToCombine[i].length;
+    }
+
+    var combinations = [];
+    for(var i = 0; i < numPerms; i++) {
+        combinations.push(getPermutation(i, arraysToCombine));
+    }
+
+    return combinations;
+  }
+
   return (
     <div className="h-full bg-gray-100">
     <div className="w-3/4 m-auto py-6">
@@ -712,9 +797,37 @@ export default function App() {
         <DenseTable iteracoes={interacoes} indexQueEntra={indexQueEntra} />
       </div>
 
-      {interacoes.length > 0 && <div>
-        <p className="text-xl">A solução ótima é <span className="font-bold">Z = {resultado?.zOtimo}</span></p>
+      <div>
+        {interacoes?.length > 0 && <div>
+          <p className="text-xl">A solução ótima é <span className="font-bold">Z = {resultado?.zOtimo}</span></p>
+        </div>}
+
+        {interacoes?.length > 0 && <div>
+          {resultado?.xOtimo.map((x, index) => (
+            <p key={index} className="text-xl">
+              X{index+1} = {x}
+            </p>
+          ))}
+        </div>}
+      </div>
+
+      {valoresInteiros && <div className="pt-4">
+        {interacoes?.length > 0 && <div>
+          <p className="text-xl">A solução inteira é <span className="font-bold">Z = {resultado?.zInteger}</span></p>
+        </div>}
+
+        {interacoes?.length > 0 && <div>
+          {resultado?.xInteger[0].map((x, index) => (
+            <p key={index} className="text-xl">
+              X{index+1} = {x}
+            </p>
+          ))}
+        </div>}
       </div>}
+
+      <button className="bg-blue-600 text-white p-2 w-full rounded" onClick={calcIntegers}>
+        Solução inteira
+      </button>
     </div>
     </div>
   )
