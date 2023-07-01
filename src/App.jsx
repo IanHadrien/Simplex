@@ -529,11 +529,17 @@ export default function App() {
       return { vars, cost };
     });
 
+    const result = {};
+
+    arrayNew.forEach((item, index) => {
+      result[index.toString()] = item;
+    });
+
     let objGrafico = {
-      constrained: arrayNew,
+      constrained: result,
       xOtimo: xOtimo, 
       zOtimo: zOtimo
-    };
+    };  
 
     console.log("objGrafico:", objGrafico);
   }
