@@ -143,7 +143,6 @@ export default function App() {
 
   // FUNÇÃO DE CÁLCULO
   const calc = () => {
-    console.log("Form:", form);
     let newForm = form;
     let newWasMIN = wasMIN;
     setCalculated(true);
@@ -464,7 +463,6 @@ export default function App() {
         }
 
         newInteracoes.push(linhaZduasFases)
-        console.log("Interacoes final: ", newInteracoes);
         setInteracoes(newInteracoes);
         newDuasFases = false
     } else if(countNovaLinha0 >= 0 && newCountExecessos == 0 && newDuasFases == false) {
@@ -515,9 +513,29 @@ export default function App() {
         newResultado.zOtimo = iteracaoFinal[0][iteracaoFinal[i].length - 1];
         setResultado(newResultado);
 
-        console.log("newResultado: ", newResultado);
-        // console.log("iteracaoFinal: ", iteracaoFinal);
+        // console.log("form: ", form);
+
+        // Função gerar graficos
+        gerarGraficos(form?.constrained, newResultado?.xOtimo, newResultado?.zOtimo);
+
+        // console.log("transformarObjetos:", form?.constrained);
+        // console.log("transformarObjetos:", transformarObjetos(form?.constrained));
     }
+  }
+
+  const gerarGraficos = (array, xOtimo, zOtimo) => {
+    const arrayNew = array.map((objeto) => {
+      const { vars, cost } = objeto;
+      return { vars, cost };
+    });
+
+    let objGrafico = {
+      constrained: arrayNew,
+      xOtimo: xOtimo, 
+      zOtimo: zOtimo
+    };
+
+    console.log("objGrafico:", objGrafico);
   }
 
   const isDecimal = (input) => {
