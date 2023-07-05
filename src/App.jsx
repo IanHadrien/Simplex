@@ -584,36 +584,35 @@ export default function App() {
       const { vars, cost } = objeto;
       return { vars, cost };
     });
-
+    console.log(arrayNew);
     const result = {};
 
     arrayNew.forEach((item, index) => {
       result[index.toString()] = item;
     });
 
-    let ar = arrayNew.map(({ cost, vars }) => {
+    let ar = arrayNew.map(({ cost, vars }, index) => {
       let nova = vars.map((item) => (item = Number(item)));
       cost = Number(cost);
-      console.log('vars', nova);
+      console.log(index);
       return { cost, vars: nova };
     });
-    let objeto = {};
+    console.log(ar);
+    let constrained = {};
 
-    for (let i = 0; i < ar.length; i++) {
-      obj[i] = ar[i];
-    }
-
-    console.log('->', objeto);
+    ar.forEach((item, index) => {
+      constrained[index.toString()] = item;
+    });
 
     let novaF = f.map((item) => Number(item));
 
     let objGrafico = {
-      constrained: ar,
+      constrained: constrained,
       xOtimo: xOtimo,
       zOtimo: zOtimo,
       f: novaF,
     };
-    console.log('------>', objGrafico);
+
     axios
       .post('http://127.0.0.1:5000/api/grafico', objGrafico, {
         'Content-Type': 'application/json',
@@ -623,8 +622,6 @@ export default function App() {
         console.log(response);
       })
       .catch((e) => console.error('Error Interno', e));
-
-    console.log('objGrafico:', objGrafico);
   };
 
   const isDecimal = (input) => {
