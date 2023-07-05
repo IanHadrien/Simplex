@@ -571,6 +571,7 @@ export default function App() {
         form?.constrained,
         newResultado?.xOtimo,
         newResultado?.zOtimo,
+        form.f,
       );
 
       // console.log("transformarObjetos:", form?.constrained);
@@ -578,7 +579,7 @@ export default function App() {
     }
   };
 
-  const gerarGraficos = (array, xOtimo, zOtimo) => {
+  const gerarGraficos = (array, xOtimo, zOtimo, f) => {
     const arrayNew = array.map((objeto) => {
       const { vars, cost } = objeto;
       return { vars, cost };
@@ -590,12 +591,29 @@ export default function App() {
       result[index.toString()] = item;
     });
 
+    let ar = arrayNew.map(({ cost, vars }) => {
+      let nova = vars.map((item) => (item = Number(item)));
+      cost = Number(cost);
+      console.log('vars', nova);
+      return { cost, vars: nova };
+    });
+    let objeto = {};
+
+    for (let i = 0; i < ar.length; i++) {
+      obj[i] = ar[i];
+    }
+
+    console.log('->', objeto);
+
+    let novaF = f.map((item) => Number(item));
+
     let objGrafico = {
-      constrained: result,
+      constrained: ar,
       xOtimo: xOtimo,
       zOtimo: zOtimo,
+      f: novaF,
     };
-
+    console.log('------>', objGrafico);
     axios
       .post('http://127.0.0.1:5000/api/grafico', objGrafico, {
         'Content-Type': 'application/json',
