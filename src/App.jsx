@@ -584,7 +584,6 @@ export default function App() {
       const { vars, cost } = objeto;
       return { vars, cost };
     });
-    console.log(arrayNew);
     const result = {};
 
     arrayNew.forEach((item, index) => {
@@ -597,7 +596,7 @@ export default function App() {
       console.log(index);
       return { cost, vars: nova };
     });
-    console.log(ar);
+
     let constrained = {};
 
     ar.forEach((item, index) => {
@@ -982,7 +981,7 @@ export default function App() {
         </button>
       </div>
 
-      {imagem && <Imagem />}
+      {imagem && form.f.length == 2 && <Imagem />}
     </div>
   );
 }
